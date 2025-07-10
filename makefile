@@ -1,7 +1,7 @@
 # OPC UA MODBUS PLC Emulator
 # Makefile for easy management
 
-.PHONY: help build up down logs scan status clean test
+.PHONY: help build up down logs scan status clean test restart monitor server-logs scanner-logs
 
 # Default target
 help:
@@ -80,4 +80,5 @@ server-logs:
 
 # Scanner logs only
 scanner-logs:
-	@echo "Showing scanner
+	@echo "Showing scanner logs..."
+	docker-compose logs -f opcua-scanner
