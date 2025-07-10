@@ -25,7 +25,6 @@ A complete OPC UA server emulator that simulates a MODBUS PLC connection, along 
 
 ### Prerequisites
 - Docker and Docker Compose
-- Make (optional, for convenience commands)
 
 ### 1. Clone and Setup
 ```bash
@@ -41,14 +40,12 @@ cd opcua-modbus-emulator
 # - Dockerfile.server
 # - Dockerfile.scanner
 # - requirements.txt
-# - Makefile (optional)
 ```
 
 ### 2. Build and Start
 ```bash
-# Using Make (recommended)
-make build
-make up
+# Build Docker images and start the emulator
+./refresh_setup.sh -b -s opc_emulator
 
 # Or using Docker Compose directly
 docker-compose build
@@ -58,7 +55,7 @@ docker-compose up -d opcua-server
 ### 3. Test the Scanner
 ```bash
 # Run scanner once
-make scan
+./refresh_setup.sh -s scanner
 
 # Or with Docker Compose
 docker-compose run --rm opcua-scanner
@@ -67,27 +64,24 @@ docker-compose run --rm opcua-scanner
 ### 4. Monitor Continuously
 ```bash
 # Start continuous monitoring
-make monitor
-
-# Or manually
 docker-compose run --rm opcua-scanner python opcua_scanner.py
 ```
 
 ## Usage
 
-### Available Make Commands
+### Control Script
 ```bash
-make help      # Show all available commands
-make build     # Build Docker images
-make up        # Start the server and scanner
-make down      # Stop all services
-make scan      # Run scanner once
-make monitor   # Start continuous monitoring
-make logs      # Show logs
-make status    # Check service status
-make clean     # Clean up containers
-make test      # Test server connectivity
-make info      # Show server information
+# Build images
+./refresh_setup.sh -b
+
+# Start the emulator
+./refresh_setup.sh -s opc_emulator
+
+# Run scanner once
+./refresh_setup.sh -s scanner
+
+# Start all services
+./refresh_setup.sh -s all
 ```
 
 ### Manual Docker Commands
@@ -213,9 +207,9 @@ Error_Count: 2
 2. **Scanner can't connect**
    ```bash
    # Check if server is running
-   make status
+   docker-compose ps
    # Check server logs
-   make server-logs
+   docker-compose logs opcua-server
    ```
 
 3. **Permission denied**

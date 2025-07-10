@@ -175,14 +175,14 @@ class OPCUAScanner:
         if not node_paths:
             # Default monitoring for PLC emulator
             node_paths = [
-                "ns=2;s=PLC_System.Temperature_Sensors.Temperature_Sensor_00",
-                "ns=2;s=PLC_System.Temperature_Sensors.Temperature_Sensor_01",
-                "ns=2;s=PLC_System.Pressure_Sensors.Pressure_Sensor_00",
-                "ns=2;s=PLC_System.Flow_Meters.Flow_Meter_00",
-                "ns=2;s=PLC_System.Motor_Controls.Motor_00_Running",
-                "ns=2;s=PLC_System.System_Status.PLC_Running",
-                "ns=2;s=PLC_System.System_Status.Communication_OK",
-                "ns=2;s=PLC_System.System_Status.Error_Count"
+                "ns=2;s=Temperature_Sensor_00",
+                "ns=2;s=Temperature_Sensor_01",
+                "ns=2;s=Pressure_Sensor_00",
+                "ns=2;s=Flow_Meter_00",
+                "ns=2;s=Motor_00_Running",
+                "ns=2;s=PLC_Running",
+                "ns=2;s=Communication_OK",
+                "ns=2;s=Error_Count"
             ]
         
         logger.info("Starting value monitoring...")
