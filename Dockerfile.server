@@ -1,0 +1,41 @@
+FROM python:3.11-slim
+
+LABEL maintainer="OPC UA Emulator"
+LABEL description="OPC UA Server emulating MODBUS PLC"
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy server code
+COPY opcua_server.py .
+
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Expose OPC UA port
+EXPOSE 4840
+
+# Create non-root user for security
+RUN useradd -m -u 1000 opcua && \
+    chown -R opcua:opcua /app
+
+USER opcua
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python -c "import socket; s=socket.socket(); s.connect(('localhost', 4840)); s.close()" || exit 1
+
+# Run the server
+CMD ["python", "opcua_server.py"]

@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  opcua-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: opcua-modbus-emulator
+    ports:
+      - "4840:4840"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('localhost', 4840)); s.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - opcua-network
+
+  opcua-scanner:
+    build:
+      context: .
+      dockerfile: Dockerfile.scanner
+    container_name: opcua-scanner
+    depends_on:
+      - opcua-server
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./scan_results:/app/scan_results
+      - ./logs:/app/logs
+    stdin_open: true
+    tty: true
+    networks:
+      - opcua-network
+    command: ["python", "/app/opcua_scanner.py"]
+
+networks:
+  opcua-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  logs:
+  scan_results:
