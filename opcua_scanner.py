@@ -175,14 +175,14 @@ class OPCUAScanner:
         if not node_paths:
             # Default monitoring for PLC emulator
             node_paths = [
-                "2:PLC_System.Temperature_Sensors.Temperature_Sensor_00",
-                "2:PLC_System.Temperature_Sensors.Temperature_Sensor_01",
-                "2:PLC_System.Pressure_Sensors.Pressure_Sensor_00",
-                "2:PLC_System.Flow_Meters.Flow_Meter_00",
-                "2:PLC_System.Motor_Controls.Motor_00_Running",
-                "2:PLC_System.System_Status.PLC_Running",
-                "2:PLC_System.System_Status.Communication_OK",
-                "2:PLC_System.System_Status.Error_Count"
+                "ns=2;s=PLC_System.Temperature_Sensors.Temperature_Sensor_00",
+                "ns=2;s=PLC_System.Temperature_Sensors.Temperature_Sensor_01",
+                "ns=2;s=PLC_System.Pressure_Sensors.Pressure_Sensor_00",
+                "ns=2;s=PLC_System.Flow_Meters.Flow_Meter_00",
+                "ns=2;s=PLC_System.Motor_Controls.Motor_00_Running",
+                "ns=2;s=PLC_System.System_Status.PLC_Running",
+                "ns=2;s=PLC_System.System_Status.Communication_OK",
+                "ns=2;s=PLC_System.System_Status.Error_Count"
             ]
         
         logger.info("Starting value monitoring...")
@@ -196,7 +196,7 @@ class OPCUAScanner:
                 for node_path in node_paths:
                     try:
                         # Try to get node by browse path
-                        node = await self.client.get_node(node_path)
+                        node = self.client.get_node(node_path)
                         value = await node.read_value()
                         display_name = await node.read_display_name()
                         print(f"{display_name}: {value}")
@@ -215,7 +215,7 @@ class OPCUAScanner:
     async def call_method(self, object_path, method_name, *args):
         """Call a method on the server"""
         try:
-            obj_node = await self.client.get_node(object_path)
+            obj_node = self.client.get_node(object_path)
             method_node = await obj_node.get_child(method_name)
             result = await obj_node.call_method(method_node, *args)
             logger.info(f"Method {method_name} called successfully: {result}")

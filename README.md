@@ -79,7 +79,7 @@ docker-compose run --rm opcua-scanner python opcua_scanner.py
 ```bash
 make help      # Show all available commands
 make build     # Build Docker images
-make up        # Start the server
+make up        # Start the server and scanner
 make down      # Stop all services
 make scan      # Run scanner once
 make monitor   # Start continuous monitoring
@@ -92,8 +92,8 @@ make info      # Show server information
 
 ### Manual Docker Commands
 ```bash
-# Start server only
-docker-compose up -d opcua-server
+# Start server and scanner
+docker-compose up -d opcua-server opcua-scanner
 
 # Run scanner interactively
 docker-compose run --rm opcua-scanner

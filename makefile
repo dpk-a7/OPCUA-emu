@@ -25,11 +25,11 @@ build:
 
 # Start services
 up:
-	@echo "Starting OPC UA services..."
-	docker-compose up -d opcua-server
-	@echo "Waiting for server to start..."
-	sleep 5
-	@echo "Server started. You can now run 'make scan' to test."
+       @echo "Starting OPC UA services..."
+       docker-compose up -d opcua-server opcua-scanner
+       @echo "Waiting for server to start..."
+       sleep 5
+       @echo "Services started. You can now run 'make monitor' to watch values."
 
 # Stop services
 down:
